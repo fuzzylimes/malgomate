@@ -47,21 +47,28 @@ func (d DetailFields) ToString() string {
 	return sb.String()
 }
 
+// Common query values
 const (
 	LargeQueryLimit int = 500
 	SmallQueryLimit int = 100
+)
 
-	// Seasons
+// Season values specify the season in seasonal queries
+const (
 	SeasonWinter Season = "winter"
 	SeasonSpring Season = "spring"
 	SeasonSummer Season = "summer"
 	SeasonFall   Season = "fall"
+)
 
-	// SeasonSort
+// SeasonSort specifies how to sort seasonal queries
+const (
 	SeasonSortScore SeasonSort = "anime_score"
 	SeasonSortUsers SeasonSort = "anime_num_list_users"
+)
 
-	// RankingType
+// RankingType are the supported ways to query MAL rankings
+const (
 	RankingAll          RankingType = "all"
 	RankingAiring       RankingType = "airing"
 	RankingUpcoming     RankingType = "upcoming"
@@ -71,8 +78,11 @@ const (
 	RankingSpecial      RankingType = "special"
 	RankingByPopularity RankingType = "bypopularity"
 	RankingFavorite     RankingType = "favorite"
+)
 
-	// QueryField
+// QueryField are the supported fields when performing a query
+// that results in a List or Ranking type response
+const (
 	FieldID                     QueryField = "id"
 	FieldTitle                  QueryField = "title"
 	FieldMainPicture            QueryField = "main_picture"
@@ -97,8 +107,11 @@ const (
 	FieldSource                 QueryField = "source"
 	FieldAverageEpisodeDuration QueryField = "average_episode_duration"
 	FieldStudios                QueryField = "studios"
+)
 
-	// DetailField
+// DetailField are the supported fields when performing a query that
+// results in a Detail type response
+const (
 	DetailID                     DetailField = "id"
 	DetailTitle                  DetailField = "title"
 	DetailMainPicture            DetailField = "main_picture"
@@ -132,6 +145,7 @@ const (
 	DetailStatistics             DetailField = "statistics"
 )
 
+// Common QueryFields when running general queries
 var (
 	BasicFieldQuery QueryFields = []QueryField{
 		FieldID,
@@ -147,6 +161,10 @@ var (
 		FieldEndDate,
 		FieldMean,
 	}
+)
+
+// Common DetailFields when running detail queries
+var (
 	BasicDetailQuery DetailFields = []DetailField{
 		DetailID,
 		DetailTitle,

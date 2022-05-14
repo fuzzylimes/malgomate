@@ -18,12 +18,12 @@ func TestRanking(t *testing.T) {
 		t.Errorf("Unexpected error: %q", err)
 	}
 
-	fmt.Println(res)
-
 	if len(res.Ranking) < 1 {
 		t.Errorf("Expected non zero number of rankings")
 	}
 
+	o, _ := json.Marshal(res)
+	fmt.Println(string(o))
 }
 
 func TestListing(t *testing.T) {
@@ -34,16 +34,12 @@ func TestListing(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %q", err)
 	}
-	fmt.Println(res)
 
 	if len(res.Listing) < 1 {
 		t.Errorf("Expected non zero number of rankings")
 	}
 
 	o, _ := json.Marshal(res)
-	fmt.Println(string(o))
-
-	o, _ = json.Marshal(res.Listing[0].Node.MainPicture)
 	fmt.Println(string(o))
 }
 
@@ -57,8 +53,6 @@ func TestSeasonal(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %q", err)
 	}
-
-	fmt.Println(res)
 
 	if len(res.Listing) < 1 {
 		t.Errorf("Expected non zero number of rankings")
@@ -76,5 +70,27 @@ func TestSeasonal(t *testing.T) {
 	}
 
 	o, _ = json.Marshal(next)
+	fmt.Println(string(o))
+}
+
+func TestDetails(t *testing.T) {
+	queryId := 10379
+	c := mal.NewClient(os.Getenv("MAL_API_KEY"))
+	res, err := c.GetDetails(&mal.DetailsQuery{
+		Id: queryId,
+		Fields: []mal.DetailField{
+			mal.DetailRelatedAnime,
+			mal.DetailRating,
+		},
+	})
+	if err != nil {
+		t.Errorf("Unexpected error: %q", err)
+	}
+
+	if res.ID != queryId {
+		t.Errorf("Expected non zero number of rankings")
+	}
+
+	o, _ := json.Marshal(res)
 	fmt.Println(string(o))
 }

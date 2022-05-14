@@ -1,6 +1,7 @@
 package malgomate
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -12,10 +13,28 @@ type RankingPage struct {
 	Paging  Paging    `json:"paging"`
 }
 
+// JSON is a helper function converts a RankingPage to a JSON string
+func (rp *RankingPage) JSON() (string, error) {
+	if s, err := json.MarshalIndent(rp, "", "  "); err == nil {
+		return string(s), err
+	} else {
+		return "", err
+	}
+}
+
 // ListPage is a paginated response page for a query that returns a list of results
 type ListPage struct {
 	Listing []Listing `json:"data"`
 	Paging  Paging    `json:"paging"`
+}
+
+// JSON is a helper function converts a ListPage to a JSON string
+func (lp *ListPage) JSON() (string, error) {
+	if s, err := json.MarshalIndent(lp, "", "  "); err == nil {
+		return string(s), err
+	} else {
+		return "", err
+	}
 }
 
 // Anime are the general response objects
@@ -51,6 +70,15 @@ type Anime struct {
 	Recommendations        []*Recommendations `json:"recommendations,omitempty"`
 	Studios                []*Studios         `json:"studios,omitempty"`
 	Statistics             *Statistics        `json:"statistics,omitempty"`
+}
+
+// JSON is a helper function that converts an anime object to a JSON string
+func (a *Anime) JSON() (string, error) {
+	if s, err := json.MarshalIndent(a, "", "  "); err == nil {
+		return string(s), err
+	} else {
+		return "", err
+	}
 }
 
 // MainPicture contains links to the cover art on MAL

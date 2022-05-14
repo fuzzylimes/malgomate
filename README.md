@@ -21,9 +21,23 @@ go get github.com/fuzzylimes/malgomate@latest
 
 ## Usage
 
-Coming soon
+You can see some basic examples in the `it` folder. Nothing too exciting here:
 
-## Suport
+```go
+import mal "github.com/fuzzylimes/malgomate"
+
+func TestListing(t *testing.T) {
+	c := mal.NewClient(os.Getenv("MAL_API_KEY"))
+	res, err := c.GetAnime(&mal.AnimeQuery{
+		Query: "Naruto",
+	})
+	if err != nil {
+		t.Errorf("Unexpected error: %q", err)
+	}
+}
+```
+
+## Support
 
 As mentioned before, malgomate does not support all of the [MAL v2.0 API features](https://myanimelist.net/apiconfig/references/api/v2). Specifically, it only provides interfaces for the following queries:
 
@@ -35,3 +49,8 @@ As mentioned before, malgomate does not support all of the [MAL v2.0 API feature
 ### What does malgomate mean?
 
 Nothing - made up word that I thought sounded interesting, that also happened to contain both `MAL` and `GO`.
+
+## TODO List
+
+[ ] Handle nested queries for QueryFields<br>
+[ ] Handle nested queries for DetailFields
