@@ -1,5 +1,4 @@
 ![malgomate](resources/malgomate.png)
-![Go Report Card](https://goreportcard.com/badge/github.com/fuzzylimes/malgomate)
 ![PkgGoDev](https://pkg.go.dev/badge/github.com/fuzzylimes/malgomate)
 ![GitHub](https://img.shields.io/github/license/fuzzylimes/malgomate)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/fuzzylimes/malgomate?label=version)
@@ -53,4 +52,5 @@ Nothing - made up word that I thought sounded interesting, that also happened to
 ## TODO List
 
 [ ] Handle nested queries for QueryFields<br>
-[ ] Handle nested queries for DetailFields
+[ ] Handle nested queries for DetailFields<br>
+[ ] Add UT
