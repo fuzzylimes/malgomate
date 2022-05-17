@@ -94,3 +94,39 @@ func TestDetails(t *testing.T) {
 	o, _ := json.Marshal(res)
 	fmt.Println(string(o))
 }
+
+func TestSubFields(t *testing.T) {
+	queryId := 10379
+	c := mal.NewClient(os.Getenv("MAL_API_KEY"))
+	res, err := c.GetDetails(&mal.DetailsQuery{
+		Id: queryId,
+		Fields: []mal.DetailField{
+			mal.DetailRelatedAnime.SubFields(&mal.DetailFields{
+				mal.DetailRank,
+			}),
+			mal.DetailRating,
+			mal.DetailRecommendations.SubFields(&mal.DetailFields{
+				mal.DetailRank,
+				mal.DetailEndDate,
+			}),
+		},
+	})
+	if err != nil {
+		t.Errorf("Unexpected error: %q", err)
+	}
+
+	for _, v := range res.RelatedAnime {
+		if v.Node.Rank == 0 {
+			t.Errorf("Unexpected result, should have been set")
+		}
+	}
+
+	for _, v := range res.Recommendations {
+		if v.Node.EndDate == "" {
+			t.Errorf("Should have returned end Date")
+		}
+	}
+
+	o, _ := json.Marshal(res)
+	fmt.Println(string(o))
+}

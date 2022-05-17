@@ -36,6 +36,46 @@ func TestListing(t *testing.T) {
 }
 ```
 
+### Helper Types
+In order to make it easier to validate incoming requests from the front end, a few helper items exist to validate incoming query data:
+
+| Value                 | Type            | Description                                             |
+|-----------------------|-----------------|---------------------------------------------------------|
+| SeasonTypeQueries     | SeasonTypes     | List of valid Season values, used in season queries     |
+| SeasonSortTypeQueries | SeasonSortTypes | List of valid SeasonSort values, used in season queries |
+| RankTypeQueries       | RankingTypes    | List of valid RankType values, used in Ranking queries  |
+
+Each of these values has it's own `.IsValid(str string)` method that can be used to check if an incoming string value is supported for that given query type.
+
+
+### SubFields
+The MAL API provies a way for you specify sub fields for fields that result in an anime response. Currently, this is only supported on a handful of `DetailField` when performing Detail queries using a `DetailsQuery`. The list of supported `DetailField` are as follows:
+
+* RelatedAnime
+* Recommendations
+
+In order to add additional fields, you simply chain a `.SubFields()` onto one of the above. It would look something like the following (you can see the full example in the it folder):
+
+```go
+queryId := 10379
+c := mal.NewClient(os.Getenv("MAL_API_KEY"))
+res, err := c.GetDetails(&mal.DetailsQuery{
+    Id: queryId,
+    Fields: []mal.DetailField{
+        mal.DetailRelatedAnime.SubFields(&mal.DetailFields{
+            mal.DetailRank,
+        }),
+        mal.DetailRating,
+        mal.DetailRecommendations.SubFields(&mal.DetailFields{
+            mal.DetailRank,
+            mal.DetailEndDate,
+        }),
+    },
+})
+```
+
+Nothing bad will happen if you run `.SubFields()` on a `DetailField` not in this list, but you also won't get anything else back.
+
 ## Support
 
 As mentioned before, malgomate does not support all of the [MAL v2.0 API features](https://myanimelist.net/apiconfig/references/api/v2). Specifically, it only provides interfaces for the following queries:
@@ -51,6 +91,6 @@ Nothing - made up word that I thought sounded interesting, that also happened to
 
 ## TODO List
 
-[ ] Handle nested queries for QueryFields<br>
-[ ] Handle nested queries for DetailFields<br>
+[X] Handle nested queries for QueryFields<br>
+[X] Handle nested queries for DetailFields<br>
 [ ] Add UT

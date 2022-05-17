@@ -1,6 +1,9 @@
 package malgomate
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // Season is the name of the season when a show aired
 type Season string
@@ -32,6 +35,12 @@ func (q QueryFields) ToString() string {
 // DetailField are field names to be returned during a details query
 type DetailField string
 
+// SubFields attaches a sub query onto a DetailField
+func (df DetailField) SubFields(sq *DetailFields) DetailField {
+	str := sq.ToString()
+	return DetailField(fmt.Sprintf("%s{%s}", df, str))
+}
+
 // DetailFields are a collection of DetailField
 type DetailFields []DetailField
 
@@ -61,11 +70,39 @@ const (
 	SeasonFall   Season = "fall"
 )
 
+// SeasonTypes are a collection of Season
+type SeasonTypes []Season
+
+// IsValid checks to see if the supplied value is a valid Seaon
+func (st SeasonTypes) IsValid(str string) bool {
+	converted := Season(str)
+	for _, v := range st {
+		if v == converted {
+			return true
+		}
+	}
+	return false
+}
+
 // SeasonSort specifies how to sort seasonal queries
 const (
 	SeasonSortScore SeasonSort = "anime_score"
 	SeasonSortUsers SeasonSort = "anime_num_list_users"
 )
+
+// SeasonSortTypes are a collection of SeasonSort
+type SeasonSortTypes []SeasonSort
+
+// IsValid checks to see if the supplied value is a valid SeasonSortType
+func (sst SeasonSortTypes) IsValid(str string) bool {
+	converted := SeasonSort(str)
+	for _, v := range sst {
+		if v == converted {
+			return true
+		}
+	}
+	return false
+}
 
 // RankingType are the supported ways to query MAL rankings
 const (
@@ -79,6 +116,20 @@ const (
 	RankingByPopularity RankingType = "bypopularity"
 	RankingFavorite     RankingType = "favorite"
 )
+
+// RankingTypes are a collection of RankingType
+type RankingTypes []RankingType
+
+// IsValid checks to see if the supplied value is a valid RankingType
+func (rt RankingTypes) IsValid(str string) bool {
+	converted := RankingType(str)
+	for _, v := range rt {
+		if v == converted {
+			return true
+		}
+	}
+	return false
+}
 
 // QueryField are the supported fields when performing a query
 // that results in a List or Ranking type response
@@ -178,5 +229,35 @@ var (
 		DetailStartDate,
 		DetailEndDate,
 		DetailMean,
+	}
+)
+
+// Grouping values for easier error checking
+var (
+	// SeasonTypeQueries are the supported query values used for seasons
+	SeasonTypeQueries SeasonTypes = []Season{
+		SeasonWinter,
+		SeasonSpring,
+		SeasonSummer,
+		SeasonFall,
+	}
+
+	// SeasonSortTypeQueries are the supported query values used when sorting season queries
+	SeasonSortTypeQueries SeasonSortTypes = []SeasonSort{
+		SeasonSortScore,
+		SeasonSortUsers,
+	}
+
+	// RankingTypeQueries are the supported query values you can use when querying for rankings
+	RankTypeQueries RankingTypes = []RankingType{
+		RankingAll,
+		RankingAiring,
+		RankingUpcoming,
+		RankingTv,
+		RankingOva,
+		RankingMovie,
+		RankingSpecial,
+		RankingByPopularity,
+		RankingFavorite,
 	}
 )
